@@ -1,5 +1,6 @@
 # Generated / derived
 rubiks.html
+ports/
 physics.html
 tools/pilots/*.ll
 tools/pilots/*.report.txt
