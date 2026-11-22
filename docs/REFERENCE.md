@@ -21,6 +21,8 @@ llang ("ell-lang") reads like structured English and behaves like Python. It is 
 
 Programs are UTF-8 text. At startup the interpreter creates one global environment and preloads every entry of `interpreter.BUILTINS` (§6) into it as a `Builtin` value. Execution order is source order; expressions are evaluated left to right. `show` writes one rendered line to stdout and also records it in `interpreter.output`.
 
+**Formatter limitation.** `llang --format` (and `python run.py --format`) renders the canonical AST, so comments and blank lines are not preserved; a one-line warning is printed to stderr. The formatter does not rewrite source text in place.
+
 ---
 
 ## 2. Lexical structure

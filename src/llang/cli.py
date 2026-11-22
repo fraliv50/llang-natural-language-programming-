@@ -25,7 +25,8 @@ def main(argv=None) -> int:
                                      add_help=True)
     parser.add_argument("file", nargs="?", help="path to a .ll source file")
     parser.add_argument("--lint", action="store_true", help="report diagnostics only")
-    parser.add_argument("--format", action="store_true", help="print canonical source")
+    parser.add_argument("--format", action="store_true",
+                        help="print canonical source (comments and blank lines are not preserved)")
     args = parser.parse_args(argv)
 
     if not args.file:
@@ -46,6 +47,8 @@ def main(argv=None) -> int:
                 print(diagnostic)
             return 1 if any(item.severity == "error" for item in diagnostics) else 0
         if args.format:
+            print("warning: --format does not preserve comments or blank lines",
+                  file=sys.stderr)
             print(format_source(source), end="")
             return 0
         run_file(path)

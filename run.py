@@ -12,7 +12,7 @@ USAGE = """usage: python run.py [OPTION] <file.ll>
 
   (no option)  run the program
   --lint       report static diagnostics without running
-  --format     print the canonical form (synonyms normalized)
+  --format     print the canonical form (comments and blank lines are not preserved)
 """
 
 
@@ -43,6 +43,8 @@ def main() -> None:
 
         if option == "--format":
             from llang.formatter import format_source
+            print("warning: --format does not preserve comments or blank lines",
+                  file=sys.stderr)
             print(format_source(source), end="")
             return
 
