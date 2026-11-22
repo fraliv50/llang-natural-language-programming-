@@ -124,6 +124,12 @@ class DiagnosticTests(unittest.TestCase):
         with self.assertRaises(LangError):
             run_source("set end to 5")
 
+    def test_reserved_word_error_suggests_escape(self):
+        for source in ("set next to 5", "show list", "set item map of xs to 1"):
+            with self.subTest(source=source), self.assertRaises(LangError) as ctx:
+                run_source(source)
+            self.assertIn("is a reserved word; write @", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

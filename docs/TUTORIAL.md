@@ -111,8 +111,7 @@ set end to 5
 ```
 
 ```text
-ERROR: Expected a name, found 'end' at line 1, column 5
-  expected one of: 'a non-reserved identifier'
+ERROR: 'end' is a reserved word; write @end to use it as a name at line 1, column 5
 ```
 
 ---

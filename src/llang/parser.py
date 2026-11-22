@@ -62,9 +62,13 @@ class Parser:
                 raise ParseError("Expected a word after '@'", escaped.pos, ["a word"])
             self.i += 1
             return escaped.text
-        if t.kind != "WORD" or t.text in RESERVED:
+        if t.kind != "WORD":
             raise ParseError(f"Expected a name, found {t.text!r}", t.pos,
                              ["a non-reserved identifier, or @word to escape"])
+        if t.text in RESERVED:
+            raise ParseError(
+                f"'{t.text}' is a reserved word; write @{t.text} to use it as a name",
+                t.pos)
         self.i += 1
         return t.text
 
@@ -657,7 +661,9 @@ class Parser:
             if t.text == "the" and self._at_word("length", 1):
                 return self._parse_length()
             if t.text in RESERVED:
-                raise ParseError(f"Reserved word {t.text!r} cannot be used here", t.pos)
+                raise ParseError(
+                    f"'{t.text}' is a reserved word; write @{t.text} to use it as a name",
+                    t.pos)
             self.i += 1
             return Variable(t.text, pos=t.pos)
         if t.kind == "PUNCT" and t.text == "(":
