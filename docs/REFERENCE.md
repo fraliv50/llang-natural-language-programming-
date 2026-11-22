@@ -31,7 +31,7 @@ Programs are UTF-8 text. At startup the interpreter creates one global environme
 
 **Comments.** `#` starts a comment that runs to the end of the line or EOF. Comments are discarded entirely. Only `#` is a comment marker — `//` and `--` are lexer errors.
 
-**Identifiers (`WORD`).** First character must satisfy Python's `str.isalpha()` or be `_`; remaining characters must satisfy `str.isalnum()` or be `_`. Names are case-sensitive. Unicode letters are accepted by the lexer. A name may not be one of the 61 reserved words (§10) when a name is required — note that `a`, `an`, `is`, and `any` are **not** reserved, and neither are operator words such as `plus` or `equals` (these act as operators in expression position, so avoid them as variable names).
+**Identifiers (`WORD`).** First character must satisfy Python's `str.isalpha()` or be `_`; remaining characters must satisfy `str.isalnum()` or be `_`. Names are case-sensitive. Unicode letters are accepted by the lexer. A plain name may not be one of the 61 reserved words (§10). A leading `@` escapes that restriction: `@end`, `@function`, and `@method` are valid identifiers, labels, parameters, and definition names anywhere a name is accepted. The formatter emits the `@` automatically when it prints a reserved name, so formatting round-trips. Note that `a`, `an`, `is`, and `any` are **not** reserved, and neither are operator words such as `plus` or `equals` (these act as operators in expression position, so avoid them as variable names).
 
 **Numbers.** One or more ASCII digits `0`–`9`, optionally followed by `.` and at least one more ASCII digit. Values become Python `int` or `float` via `int()`/`float()`. There is no leading sign, exponent, hexadecimal/octal/binary form, underscore separator, or leading `.`. Negative values are expressions: `0 minus 5`.
 
@@ -134,7 +134,7 @@ Examples: `show (an empty list) is empty` → `true`; `show 0 is empty` → `fal
 - `ask INSTANCE to METHOD [with label = expr, ...]` calls a method and is a primary expression, so it can be nested (`show ask p to total` or `show (ask p to total) plus 1`). The receiver is evaluated first, then the argument values left to right. It supplies `this` = receiver automatically; callers must not pass a `this` label. Details in §5.4.
 - `call NAME [with label = expr, ...]` is a primary expression, so it can be nested anywhere: `show call welcome with name = "Ada"`, `set n to (call text of with value = 42) plus "!"`. A bare `call ...` statement evaluates and discards the result.
 - **Call names** are the maximal run of `WORD` tokens after `call`, stopping at `with`, end of line/EOF, or punctuation. Reserved and operator words are allowed inside a call name; this is how phrase names such as `call uppercase of with ...`, `call is text with ...`, and `call read text from with ...` work. No call name may contain `with`, because `with` introduces the arguments. An empty name raises `Expected a function or built-in name after 'call'`.
-- **Labels** are non-reserved identifiers. Label order is arbitrary; all parameters are mandatory. Argument *values* are parsed with the full expression parser, which is greedy: parenthesize a collection literal or other compound value that precedes another label, e.g. `call join with items = (a list of 1, 2, 3), separator = ","`. Without parentheses the list literal absorbs the following label and parsing fails.
+- **Labels** are non-reserved identifiers, or any word prefixed with `@` when the parameter itself is reserved (e.g. `call total with @end = 41`). Label order is arbitrary; all parameters are mandatory. Argument *values* are parsed with the full expression parser, which is greedy: parenthesize a collection literal or other compound value that precedes another label, e.g. `call join with items = (a list of 1, 2, 3), separator = ","`. Without parentheses the list literal absorbs the following label and parsing fails.
 - Call evaluation order: the callable name is resolved first, then argument values are evaluated left to right, then labels are validated.
 
 ---
@@ -176,7 +176,7 @@ end function
 
 - `define a function ...` is an exact synonym of `define function ...`.
 - The alias line must come immediately after the definition line. `also known as`, `also called`, and `also called as` are accepted. Every alias binds to the *same* `Function` object.
-- Names, aliases, and parameters must be non-reserved identifiers. Parameters are mandatory, labeled, and have **no defaults**.
+- Function, class, and method **definition names may be multi-word phrases** (e.g. `define function find all taking xs`), which are then called as `call find all with xs = ...`. Names, aliases, and parameters must be non-reserved identifiers unless escaped with `@`; the method receiver must be `this` (or `@this`). Parameters are mandatory, labeled, and have **no defaults**.
 - If any of the function's names is already bound locally in the environment where the definition executes, the definition fails: `Name 'X' is already defined; a function alias cannot shadow it`. At global scope the builtin names count as already bound, so a user function cannot be named `trim`, `sort`, etc.
 - A function body runs in a fresh `Env(parent=definition_env)`. Free variables are resolved at call time through that parent chain (lexical closure, late binding).
 - `give back EXPR` / `return EXPR` (exact synonyms) exit the function with a value. Falling off the end returns `nothing`. A `give back` outside a function raises `'give back' used outside a function` at its position.
@@ -489,7 +489,8 @@ op           ::= "plus" | "minus" | "times" | "divided by" | "floor divided by" 
                | "exceeds" | "is less than" | "is at least" | "is at most"
                | "equals" | "is equal to" | "does not equal"
                | "is not equal to" | "differs from" | "and" | "or"
-name         ::= WORD  (* but not one of the 61 reserved words *)
+name         ::= WORD | "@" WORD  (* @ admits reserved words *)
+def_name     ::= WORD+            (* definitions may be named by a phrase *)
 ```
 
 Lexical notes: `NUMBER ::= DIGIT+ ("." DIGIT+)?` with ASCII digits only; `STRING ::= '"' ('\n' | '\t' | '\"' | '\\' | any-char-but-quote-newline)* '"'`; `WORD ::= (letter | "_") (letter | digit | "_")*` using Python Unicode letter/digit predicates; `# ... NEWLINE` is a comment; whitespace and indentation are insignificant.

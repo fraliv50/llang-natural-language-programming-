@@ -18,6 +18,12 @@ from .ast_nodes import (
 )
 from .lexer import Lexer
 from .parser import Parser
+from .synonyms import RESERVED
+
+
+def _name(text: str) -> str:
+    """Escape a reserved identifier with '@' so it survives a round-trip."""
+    return "@" + text if text in RESERVED else text
 
 
 # One canonical phrase per operator code. These are exactly the phrases from
@@ -186,7 +192,7 @@ def _expr(node, *, nested: bool = False) -> str:
         return _literal(node.value)
 
     if isinstance(node, Variable):
-        return node.name
+        return _name(node.name)
 
     if isinstance(node, Unary):
         if node.op == "NOT":
@@ -203,19 +209,20 @@ def _expr(node, *, nested: bool = False) -> str:
         return f"{left} {_OPERATOR_PHRASES[node.op]} {right}"
 
     if isinstance(node, Call):
-        text = "call " + node.name
+        text = "call " + _name(node.name)
         if node.args:
             args = ", ".join(
-                f"{label} = {_expr(value, nested=True)}" for label, value in node.args
+                f"{_name(label)} = {_expr(value, nested=True)}"
+                for label, value in node.args
             )
             text += " with " + args
         return f"({text})" if wrap else text
 
     if isinstance(node, MethodCall):
-        text = "ask " + _expr(node.receiver, nested=True) + " to " + node.method
+        text = "ask " + _expr(node.receiver, nested=True) + " to " + _name(node.method)
         if node.args:
             text += " with " + ", ".join(
-                f"{label} = {_expr(value, nested=True)}"
+                f"{_name(label)} = {_expr(value, nested=True)}"
                 for label, value in node.args
             )
         return f"({text})" if wrap else text
@@ -258,7 +265,7 @@ def _statement(node, level: int) -> list:
         return _statements(node.statements, level)
 
     if isinstance(node, Set):
-        return [_line(f"set {node.name} to {_expr(node.expr)}", level)]
+        return [_line(f"set {_name(node.name)} to {_expr(node.expr)}", level)]
 
     if isinstance(node, Show):
         return [_line(f"show {_expr(node.expr)}", level)]
@@ -290,7 +297,7 @@ def _statement(node, level: int) -> list:
     if isinstance(node, ForEach):
         lines = [
             _line(
-                f"repeat for each {node.name} in {_expr(node.iterable, nested=True)}",
+                f"repeat for each {_name(node.name)} in {_expr(node.iterable, nested=True)}",
                 level,
             )
         ]
@@ -299,17 +306,17 @@ def _statement(node, level: int) -> list:
         return lines
 
     if isinstance(node, MethodDef):
-        text = (f"define method {node.name} taking "
-                + ", ".join(node.params))
+        text = (f"define method {_name(node.name)} taking "
+                + ", ".join(_name(param) for param in node.params))
         lines = [_line(text, level)]
         lines.extend(_block_lines(node.body, level + 1))
         lines.append(_line("end method", level))
         return lines
 
     if isinstance(node, ClassDef):
-        text = f"define class {node.name}"
+        text = f"define class {_name(node.name)}"
         if node.fields:
-            text += " taking " + ", ".join(node.fields)
+            text += " taking " + ", ".join(_name(field) for field in node.fields)
         lines = [_line(text, level)]
         for method in node.methods:
             lines.extend(_statement(method, level + 1))
@@ -317,12 +324,12 @@ def _statement(node, level: int) -> list:
         return lines
 
     if isinstance(node, FunctionDef):
-        text = f"define function {node.name}"
+        text = f"define function {_name(node.name)}"
         if node.params:
-            text += " taking " + ", ".join(node.params)
+            text += " taking " + ", ".join(_name(param) for param in node.params)
         lines = [_line(text, level)]
         if node.aliases:
-            lines.append(_line("also known as " + ", ".join(node.aliases), level))
+            lines.append(_line("also known as " + ", ".join(_name(alias) for alias in node.aliases), level))
         lines.extend(_block_lines(node.body, level + 1))
         lines.append(_line("end function", level))
         return lines
@@ -358,7 +365,7 @@ def _statement(node, level: int) -> list:
         return [_line("skip to the next item", level)]
 
     if isinstance(node, Fail):
-        text = f"fail with {node.kind}"
+        text = f"fail with {_name(node.kind)}"
         if node.message is not None:
             text += f", {_string(node.message)}"
         return [_line(text, level)]

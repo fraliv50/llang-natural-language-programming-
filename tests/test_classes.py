@@ -365,8 +365,16 @@ end class
         self._assert_error("show this", "Undefined name 'this'")
 
     def test_inheritance_is_deliberately_omitted(self):
-        # There is no `inherits` clause in this first version.
-        source = "define class Dog inherits from Animal with fields tricks\nend class"
+        # Phrase names allow the words "inherits from", but that grants no
+        # inheritance behaviour: parent fields are not present on the instance.
+        source = """
+define class Animal taking name
+end class
+define class Dog inherits from Animal taking tricks
+end class
+set d to call new Dog inherits from Animal with tricks = (a list of 1)
+show item "name" of d
+"""
         with self.assertRaises(LangError):
             _output(source)
 

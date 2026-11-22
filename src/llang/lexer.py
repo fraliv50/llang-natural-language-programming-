@@ -59,7 +59,7 @@ class Lexer:
                 tokens.append(self._number())
             elif ch.isalpha() or ch == "_":
                 tokens.append(self._word())
-            elif ch in "(),=":
+            elif ch in "(),=@":
                 pos = self._pos()
                 text = self._advance()
                 tokens.append(Token("PUNCT", text, pos))

@@ -22,6 +22,7 @@ program parses, lints clean, and produces output identical to the original.
 - **Values:** numbers, text, booleans, `nothing`, lists, maps, functions
 - **Statements:** `set`/`let`, `show`/`display`/`print`, `require`, `add`, `set item`, `if`/`otherwise`, `repeat while`, `repeat for each`, `stop the loop`, `skip to the next item`, functions with aliases, labeled `call`, `fail`/`expect` problem handling, `use` modules
 - **Expressions:** strictly left-to-right with parentheses for grouping, word operators with closed synonyms (`floor divided by` included), postfix predicates, collection literals, indexing, phrase-named builtins, `apply` for calling function values
+- **AI ergonomics:** definitions may use phrase names (`define function find all ...`), and `@` escapes reserved words anywhere a name is expected (`taking @end`, `call f with @end = 1`)
 - **Domain libraries:** `advanced_math` (math/statistics), `datascience` (NumPy/pandas semantics), `machinelearning` (scikit-learn semantics) — all native llang, with self-describing results and loud validation
 - **Libraries:** native llang modules in `lib/` (`math`, `text`, `lists`, `shell`, `shlex`, `fnmatch`, `textwrap`, `csv`, `json`, `re`, `ast_contract`, `pylev`, `humanize`), plus an explicitly labeled opt-in foreign bridge (`json`, `math`, `shell`)
 - **Objects:** minimal classes with explicit `this`, single inheritance-free construction via `call new ...`, and `ask instance to method ...`

@@ -7,6 +7,8 @@ Indentation is decoration only. One statement per line. Reserved structural word
 line     := statement NEWLINE
 comment  := "#" ... NEWLINE          # ignored entirely
 word     := [A-Za-z_][A-Za-z0-9_]*
+name     := word | "@" word          # @ escapes the reserved-word set
+def_name := word+                    # definitions may use multi-word phrases
 number   := [0-9]+ ("." [0-9]+)?    # ASCII digits only
 string   := '"' (escape | char)* '"'
 escape   := "\" ("n" | "t" | '"' | "\")
@@ -37,7 +39,7 @@ repeat       := ("repeat while" expr | "while" expr) NEWLINE block "end repeat"
 stop         := "stop the loop"
 skip         := "skip to the next item"
 
-function_def := "define" ["a"] "function" name ["taking" name_list] NEWLINE
+function_def := "define" ["a"] "function" def_name ["taking" name_list] NEWLINE
                  [alias_line] block "end function"
 alias_line   := "also known as" name_list NEWLINE
               | "also called" ["as"] name_list NEWLINE

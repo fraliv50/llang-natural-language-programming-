@@ -50,7 +50,7 @@ RESERVED = {
     # modules and libraries
     "use", "module", "foreign",
     # classes / records (the minimal class system)
-    "class", "method", "ask", "this",
+    "class", "method", "ask",
 }
 
 KEYWORD_STARTS = RESERVED | set(SHOW_WORDS) | set(SET_WORDS) | set(RETURN_WORDS) | set(ALIAS_WORDS)

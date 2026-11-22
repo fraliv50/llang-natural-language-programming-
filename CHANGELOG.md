@@ -89,6 +89,13 @@ All notable changes to llang are recorded here. Dates follow the development ses
 - Installed MinGW-w64 GCC via `tools/cc.py` so the C-like surface can be verified against a real compiler
 - `c-ll` v1 implementation in progress in `src/llang/cll/`
 
+## 2026-11-22 — AI ergonomics
+
+- Function, class and method definitions may now use **multi-word phrase names**, called with the matching phrase
+- Added the `@` escape sigil: any reserved word can be used as an identifier, label, parameter, or definition name (`@end`, `@function`), and the formatter emits it automatically so round-trips are stable
+- `this` removed from the reserved set (the method receiver is still positional and explicit)
+- 7 new tests in `tests/test_ai_ergonomics.py`
+
 ## Known limitations
 
 See `docs/ROADMAP.md`. The primary execution path is the interpreter; a WASM backend exists for the integer/function subset.

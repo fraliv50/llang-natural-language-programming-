@@ -50,12 +50,47 @@ class Parser:
             raise ParseError(f"Expected '{punct}', found {t.text!r}", t.pos, [punct])
 
     def _expect_name(self) -> str:
+        """Read a name. A leading `@` escapes the reserved-word set, so any
+        word (including `end`, `function`, `method`) can be used as an
+        identifier or argument label.
+        """
         t = self._tok()
+        if t.kind == "PUNCT" and t.text == "@":
+            self.i += 1
+            escaped = self._tok()
+            if escaped.kind != "WORD":
+                raise ParseError("Expected a word after '@'", escaped.pos, ["a word"])
+            self.i += 1
+            return escaped.text
         if t.kind != "WORD" or t.text in RESERVED:
             raise ParseError(f"Expected a name, found {t.text!r}", t.pos,
-                             ["a non-reserved identifier"])
+                             ["a non-reserved identifier, or @word to escape"])
         self.i += 1
         return t.text
+
+    def _parse_def_name(self) -> str:
+        """Definition names may be multi-word phrases. Stops at `taking`,
+        end of line, or punctuation; `@word` admits a reserved word anywhere.
+        """
+        words = []
+        while True:
+            t = self._tok()
+            if t.kind == "PUNCT" and t.text == "@":
+                self.i += 1
+                escaped = self._tok()
+                if escaped.kind != "WORD":
+                    raise ParseError("Expected a word after '@'", escaped.pos, ["a word"])
+                words.append(escaped.text)
+                self.i += 1
+                continue
+            if t.kind != "WORD" or t.text == "taking":
+                break
+            words.append(t.text)
+            self.i += 1
+        if not words:
+            token = self._tok()
+            raise ParseError("Expected a definition name", token.pos, ["a name"])
+        return " ".join(words)
 
     def _skip_newlines(self):
         while self._tok().kind == "NEWLINE":
@@ -357,7 +392,7 @@ class Parser:
         self._expect_word("define")
         self._accept_word("a")
         self._expect_word("class")
-        name = self._expect_name()
+        name = self._parse_def_name()
         fields = []
         if self._accept_word("taking"):
             fields = self._parse_name_list()
@@ -388,14 +423,19 @@ class Parser:
         self._expect_word("define")
         self._accept_word("a")
         self._expect_word("method")
-        name = self._expect_name()
+        name = self._parse_def_name()
         self._expect_word("taking")
         # The receiver is explicit: 'this' must be the first parameter.
+        # `@this` is accepted too, since 'this' is a reserved word.
         token = self._tok()
-        if token.kind != "WORD" or token.text != "this":
+        if token.kind == "PUNCT" and token.text == "@" and \
+                self._tok(1).kind == "WORD" and self._tok(1).text == "this":
+            self.i += 2
+        elif token.kind == "WORD" and token.text == "this":
+            self.i += 1
+        else:
             raise ParseError("A method's first parameter must be 'this'",
                              token.pos, ["this"])
-        self.i += 1
         params = ["this"]
         while self._accept_punct(","):
             params.append(self._expect_name())
@@ -411,7 +451,7 @@ class Parser:
         self._expect_word("ask")
         receiver = self.parse_expr()
         self._expect_word("to")
-        method = self._expect_name()
+        method = self._parse_call_name(context="to")
         args = []
         if self._accept_word("with"):
             token = self._tok()
@@ -427,7 +467,7 @@ class Parser:
         self._expect_word("define")
         self._accept_word("a")
         self._expect_word("function")
-        name = self._expect_name()
+        name = self._parse_def_name()
         params = []
         if self._accept_word("taking"):
             params = self._parse_name_list()
@@ -543,16 +583,23 @@ class Parser:
                 break
         return node
 
-    def _parse_call_name(self) -> str:
-        """A call name is the run of words between 'call' and 'with' (or EOL).
+    def _parse_call_name(self, context: str = "call") -> str:
+        """A reference name is the run of words up to `with` or end of line.
 
-        This allows English phrase names such as `call uppercase of with ...`.
+        This allows phrase names such as `call uppercase of with ...` and
+        `ask point to move by with ...`. A leading `@` escapes reserved words.
         """
-        # The name is every word up to 'with', end of line, or punctuation.
-        # Operator words are allowed inside names (e.g. `rounded to places`).
         words = []
         while True:
             token = self._tok()
+            if token.kind == "PUNCT" and token.text == "@":
+                self.i += 1
+                escaped = self._tok()
+                if escaped.kind != "WORD":
+                    raise ParseError("Expected a word after '@'", escaped.pos, ["a word"])
+                words.append(escaped.text)
+                self.i += 1
+                continue
             if token.kind == "WORD" and token.text != "with":
                 words.append(token.text)
                 self.i += 1
@@ -560,8 +607,7 @@ class Parser:
                 break
         if not words:
             token = self._tok()
-            raise ParseError("Expected a function or built-in name after 'call'",
-                             token.pos, ["a name"])
+            raise ParseError(f"Expected a name after '{context}'", token.pos, ["a name"])
         return " ".join(words)
 
     def parse_call_expr(self) -> Call:
@@ -578,6 +624,13 @@ class Parser:
         if t.kind in ("NUMBER", "STRING"):
             self.i += 1
             return Literal(t.value, pos=t.pos)
+        if t.kind == "PUNCT" and t.text == "@":
+            self.i += 1
+            escaped = self._tok()
+            if escaped.kind != "WORD":
+                raise ParseError("Expected a word after '@'", escaped.pos, ["a word"])
+            self.i += 1
+            return Variable(escaped.text, pos=escaped.pos)
         if t.kind == "WORD":
             if t.text == "true":
                 self.i += 1
