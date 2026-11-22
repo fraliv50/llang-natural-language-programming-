@@ -120,6 +120,37 @@ call say_hello with name = "Ada"
 ## Builtins (phrase names and aliases)
 `text of` / `to text` / `to_text`; `number from text` / `to number`; `number` / `is number`; `text` / `is text`; `list` / `is list`; `map` / `is map`; `keys of` / `keys`; `values of` / `values`; `contains` / `does contain`; `join` / `join items`; `split` / `split text`; `sort` / `sorted`; `sum` / `sum of`; `minimum` / `minimum of`; `maximum` / `maximum of`; `reverse of` / `reverse`; `absolute` / `absolute value of`; `rounded` / `rounded to places`; `uppercase of` / `uppercase`; `lowercase of` / `lowercase`; `trim`; `find in text`; `replace in text`; `insert into` (labels `collection`, `index`, `value`); `slice` (labels `collection`, optional `start`/`finish` — Python-style clipping, `nothing` means omitted); `apply` (labels `fn`, `args` — calls a function with positional values); `predict` (labels `model`, `features` — calls the model map's stored `predict` function with the model and features); `read text from` / `read_file`; `write text to` / `write_file`.
 
+## Gotchas (read before writing code)
+
+- Builtins are **only** callable as `call NAME with label = value`, never inline: write `call uppercase of with text = s`. (`the length of xs` is separate syntax, not a builtin call.)
+- Argument labels are fixed per builtin. Plain (required) labels, then optional ones:
+
+| Builtin name(s) | Labels |
+|---|---|
+| keys, keys of, values, values of | collection |
+| slice | collection, optional start, finish |
+| insert into | collection, index, value |
+| contains, does contain | collection, value |
+| apply | fn, args |
+| maximum, maximum of, minimum, minimum of, reverse, reverse of, sort, sorted, sum, sum of | items |
+| join, join items | items, separator |
+| predict | model, features |
+| read text from, read_file | path |
+| write text to, write_file | path, content |
+| lowercase, lowercase of, number from text, to number, to_number, trim, uppercase, uppercase of | text |
+| split, split text | text, by |
+| replace in text | text, old, new |
+| find in text | text, piece |
+| absolute, absolute value of, is list, is map, is number, is text, is_list, is_map, is_number, is_text, list, map, number, text, text of, to text, to_text | value |
+| rounded, rounded to places | value, optional places |
+
+- Indexing is **0-based** and works on lists and text: `item 0 of xs`.
+- There are **no negative literals**. Write `0 minus 5`, not `-5`. A leading `@` escapes a reserved word: `@end`.
+- Reserved words: `add`, `also`, `always`, `and`, `as`, `ask`, `back`, `be`, `call`, `called`, `class`, `define`, `display`, `each`, `empty`, `end`, `expect`, `fail`, `false`, `foreign`, `from`, `function`, `give`, `if`, `in`, `item`, `kind`, `known`, `length`, `let`, `list`, `loop`, `map`, `mapped`, `method`, `module`, `next`, `not`, `nothing`, `occurs`, `of`, `or`, `otherwise`, `print`, `problem`, `remove`, `repeat`, `require`, `return`, `set`, `show`, `skip`, `stop`, `taking`, `the`, `then`, `to`, `true`, `use`, `went`, `while`, `with`, `wrong`
+- Postfix predicates bind to the nearest primary. Parenthesize compound operands: `(item "k" of x) is empty`, not `item "k" of x is empty`.
+- Loops stop after **100,000 iterations**; recursion fails at roughly **250 levels**. Both produce a source-located error.
+- All binary operators have the **same precedence** and associate left-to-right. Parenthesize **each** comparison when combining with `and`/`or`: `(x is at least 0) and (x is at most 10)`.
+
 ## Example
 ```
 set greeting to "Hello"
@@ -136,7 +167,7 @@ show item "Ada" of scores
 
 expect
     show item "Nobody" of scores
-if a problem occurs then
+if a problem of kind missing_key occurs then
     show "missing"
 end expect
 ```
