@@ -28,12 +28,18 @@ dev = [
   "numpy",
   "pandas",
   "scikit-learn",
+  "pycparser",
+  "tree_sitter",
+  "tree_sitter_javascript",
 ]
 port = [
   "pycparser",
   "tree_sitter",
   "tree_sitter_javascript",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.setuptools]
 package-dir = { "" = "src" }
