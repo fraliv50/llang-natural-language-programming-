@@ -289,6 +289,21 @@ class _Linter:
             self._walk(node.body, scope, in_function)
             return
 
+        if isinstance(node, Binary):
+            if (node.op in ("EQ", "NE", "GT", "LT", "GE", "LE")
+                    and isinstance(node.left, Binary)
+                    and node.left.op in ("AND", "OR")):
+                self._add(
+                    "warning",
+                    f"Unparenthesized '{node.left.op.lower()}' before "
+                    f"'{node.op.lower()}': comparisons and and/or share one "
+                    "left-to-right precedence; parenthesize each comparison, "
+                    f"e.g. `(x equals 5) {node.left.op.lower()} (x equals 6)`",
+                    node.pos)
+            for child in _node_children(node):
+                self._walk(child, scope, in_function)
+            return
+
         if isinstance(node, FunctionDef):
             self._walk_function_def(node, scope)
             return

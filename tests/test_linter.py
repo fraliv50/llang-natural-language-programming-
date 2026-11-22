@@ -225,6 +225,19 @@ end repeat
                          messages)
 
 
+class PrecedenceClarityTests(unittest.TestCase):
+    def test_warns_on_unparenthesized_and_or_before_comparison(self):
+        diagnostics = lint_source("set x to 1\nshow x equals 5 or x equals 6\n")
+        warnings = [d for d in diagnostics if d.severity == "warning"]
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("Unparenthesized 'or'", warnings[0].message)
+        self.assertIn("(x equals 5) or (x equals 6)", warnings[0].message)
+
+    def test_no_warning_when_comparisons_are_parenthesized(self):
+        self.assertEqual(
+            lint_source("set x to 1\nshow (x equals 5) or (x equals 6)\n"), [])
+
+
 class DiagnosticShapeTests(unittest.TestCase):
     def test_positions_come_from_ast(self):
         diagnostics = lint_source("# a comment\nshow missing")
