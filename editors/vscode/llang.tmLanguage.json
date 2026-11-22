@@ -1,0 +1,123 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "llang",
+  "scopeName": "source.llang",
+  "fileTypes": ["ll"],
+  "foldingStartMarker": "^\\s*(?:define\\s+(?:a\\s+)?(?:function|class|method)|if\\b.*\\bthen\\s*$|repeat\\b|while\\b|expect\\s*$|always\\s*$|otherwise\\b)",
+  "foldingStopMarker": "^\\s*end\\s+(?:if|repeat|function|expect|class|method)\\s*$",
+  "patterns": [
+    { "include": "#comment-header" },
+    { "include": "#comment" },
+    { "include": "#string" },
+    { "include": "#number" },
+    { "include": "#argument-label" },
+    { "include": "#section-opener" },
+    { "include": "#section-closer" },
+    { "include": "#predicate" },
+    { "include": "#operator" },
+    { "include": "#builtin" },
+    { "include": "#keyword-control" },
+    { "include": "#keyword-loop" },
+    { "include": "#keyword-declaration" },
+    { "include": "#keyword-module" },
+    { "include": "#keyword-flow" },
+    { "include": "#keyword-output" },
+    { "include": "#constant" },
+    { "include": "#keyword-collection" },
+    { "include": "#punctuation" }
+  ],
+  "repository": {
+    "comment-header": {
+      "name": "comment.line.number-sign.llang",
+      "match": "#\\s*[=~#-]{3,}.*$",
+      "captures": {
+        "0": { "name": "entity.name.section.llang" }
+      }
+    },
+    "comment": {
+      "name": "comment.line.number-sign.llang",
+      "match": "#.*$"
+    },
+    "string": {
+      "name": "string.quoted.double.llang",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        { "include": "#string-escape" },
+        { "name": "invalid.illegal.escape.llang", "match": "\\\\[^\"\\\\]" }
+      ]
+    },
+    "string-escape": {
+      "name": "constant.character.escape.llang",
+      "match": "\\\\[nt\"\\\\]"
+    },
+    "number": {
+      "name": "constant.numeric.llang",
+      "match": "(?<![A-Za-z0-9_])\\d+(?:\\.\\d+)?(?![A-Za-z0-9_])"
+    },
+    "argument-label": {
+      "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?==)",
+      "captures": {
+        "1": { "name": "variable.parameter.llang" }
+      }
+    },
+    "section-opener": {
+      "name": "entity.name.section.llang",
+      "match": "\\b(?:define\\s+(?:a\\s+)?(?:function|class|method)|if\\s+[^\\n]*\\bthen\\b|otherwise(?:\\s+if\\s+[^\\n]*\\bthen\\b)?|repeat\\s+(?:while|for\\s+each)|while|expect|always|also\\s+(?:known\\s+as|called(?:\\s+as)?)|ask\\s+[^\\n]*\\bto\\b)\\b"
+    },
+    "section-closer": {
+      "name": "entity.name.section.llang",
+      "match": "\\bend\\s+(?:if|repeat|function|expect|class|method)\\b"
+    },
+    "predicate": {
+      "name": "keyword.operator.predicate.llang",
+      "match": "\\b(?:is\\s+not\\s+empty|is\\s+empty|is\\s+nothing|is\\s+a\\s+number|is\\s+a\\s+list|is\\s+a\\s+map|is\\s+text)\\b"
+    },
+    "operator": {
+      "name": "keyword.operator.word.llang",
+      "match": "\\b(?:is\\s+not\\s+equal\\s+to|does\\s+not\\s+equal|to\\s+the\\s+power\\s+of|floor\\s+divided\\s+by|is\\s+greater\\s+than|is\\s+more\\s+than|is\\s+less\\s+than|is\\s+at\\s+least|is\\s+at\\s+most|is\\s+equal\\s+to|divided\\s+by|differs\\s+from|equals|exceeds|plus|minus|times|modulo|and|or|not)\\b"
+    },
+    "builtin": {
+      "name": "support.function.builtin.llang",
+      "match": "\\b(?:absolute\\s+value\\s+of|number\\s+from\\s+text|read\\s+text\\s+from|write\\s+text\\s+to|replace\\s+in\\s+text|rounded\\s+to\\s+places|find\\s+in\\s+text|insert\\s+into|join\\s+items|split\\s+text|minimum\\s+of|maximum\\s+of|keys\\s+of|values\\s+of|sum\\s+of|reverse\\s+of|uppercase\\s+of|lowercase\\s+of|does\\s+contain|is\\s+number|is\\s+text|is\\s+list|is\\s+map|to\\s+text|text\\s+of|to\\s+number|to_text|to_number|is_number|is_text|is_list|is_map|read_file|write_file|absolute|contains|join|split|sort|sorted|sum|minimum|maximum|reverse|rounded|uppercase|lowercase|trim|apply|keys|values|number|text|list|map)\\b"
+    },
+    "keyword-control": {
+      "name": "keyword.control.conditional.llang",
+      "match": "\\b(?:if|then|otherwise|end|expect|always|problem|kind|occurs|went|wrong|fail)\\b"
+    },
+    "keyword-loop": {
+      "name": "keyword.control.loop.llang",
+      "match": "\\b(?:repeat|while|each|in|stop|next|loop|skip)\\b"
+    },
+    "keyword-declaration": {
+      "name": "keyword.declaration.llang",
+      "match": "\\b(?:define|function|class|method|set|let|taking|new|ask|this)\\b"
+    },
+    "keyword-module": {
+      "name": "keyword.control.import.llang",
+      "match": "\\b(?:use|module|foreign)\\b"
+    },
+    "keyword-flow": {
+      "name": "keyword.other.llang",
+      "match": "\\b(?:call|with|from|as|also|known|called|give|back|return|be|to|of|the|item|length|mapped)\\b"
+    },
+    "keyword-output": {
+      "name": "keyword.other.output.llang",
+      "match": "\\b(?:show|display|print|require|add|remove)\\b"
+    },
+    "constant": {
+      "name": "constant.language.llang",
+      "match": "\\b(?:true|false|nothing|empty)\\b"
+    },
+    "keyword-collection": {
+      "name": "support.type.collection.llang",
+      "match": "\\b(?:list|map)\\b"
+    },
+    "punctuation": {
+      "patterns": [
+        { "name": "punctuation.separator.llang", "match": "[(),]" },
+        { "name": "keyword.operator.assignment.llang", "match": "=" }
+      ]
+    }
+  }
+}

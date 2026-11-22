@@ -1,0 +1,44 @@
+# NOTICE — third-party material
+
+llang is an original implementation. The following third-party material is
+included for research, differential verification, and provenance. It is not
+covered by the project's MIT license; each item remains under its own license.
+
+| Material | Origin | License | Copyright / holder | Pin |
+|---|---|---|---|---|
+| pypybox2d source (vendored) | https://github.com/pybox2d/pypybox2d | zlib | pypybox2d contributors | commit `ee7b81ff83a03d017534f5f7ac36e642ac27e33c` |
+| CPython `bisect.py`, `fnmatch.py` (pilots) | CPython 3.11 `Lib/` | PSF License Agreement | Python Software Foundation | CPython 3.11 branch |
+| humanize `filesize.py` (pilot) | python-humanize/humanize | MIT | Jason Moiron and contributors | `master` snapshot (see tools/pilots/README.md) |
+| humanize number-formatting source (embedded oracle in `tools/compare_humanize.py`) | python-humanize/humanize | MIT | Copyright (c) 2010-2020 Jason Moiron and Contributors | upstream `main` snapshot; i18n calls mechanically resolved to identity |
+| pylev source (embedded oracle in `tests/test_pylev.py`) | https://github.com/toastdriven/pylev | BSD-3-Clause | Peter Fiin and contributors | tag `v1.3.0`, commit `e79ef6814c51046fee635a2a2316f8c57fa1a697` |
+
+## MIT notice for embedded humanize source
+
+Copyright (c) 2010-2020 Jason Moiron and Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## License texts
+
+Full license texts for vendored projects are included alongside their sources:
+
+- `tools/rewrites/pypybox2d/source/LICENSE` (zlib)
+- CPython license: https://docs.python.org/3/license.html
+- humanize license: https://raw.githubusercontent.com/python-humanize/humanize/main/LICENCE
+- pylev license: https://github.com/toastdriven/pylev/blob/v1.3.0/LICENSE

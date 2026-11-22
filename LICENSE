@@ -1,0 +1,42 @@
+MIT License
+
+Copyright (c) 2026 The llang Project
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Scope of this license
+
+The MIT grant above applies to llang's original source in `src/llang/`, `lib/`,
+`tests/`, `examples/`, `tools/` (except vendored and embedded third-party
+material described below), and the documentation authored for this project.
+
+Third-party material
+
+This repository grounds its semantics in open-source projects and, for
+verification purposes, vendors or embeds some third-party source. That material
+is NOT covered by the MIT grant above; it remains under its own license, held by
+its respective authors. See `NOTICE` for the complete inventory, licenses,
+copyright holders, and source references. In particular:
+
+- `tools/rewrites/pypybox2d/source/` — pypybox2d, zlib license, pinned commit
+- `tools/pilots/` — CPython stdlib and humanize sources used as conversion inputs
+- embedded verbatim oracle sources in `tools/compare_humanize.py` and
+  `tests/test_pylev.py` — humanize (MIT) and pylev (BSD-3-Clause) respectively

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llang"
+version = "0.1.0"
+description = "A structured natural-language programming language"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "The llang Project" }]
+keywords = ["language", "interpreter", "natural-language", "ai-first"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Interpreters",
+]
+
+[project.scripts]
+llang = "llang.cli:main"
+llang-port = "llang.convert_cli:main"
+llang-compile = "llang.compile_cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "numpy",
+  "pandas",
+  "scikit-learn",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

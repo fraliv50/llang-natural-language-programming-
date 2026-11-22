@@ -1,0 +1,90 @@
+site_name: llang
+site_description: A structured-English programming language with Python semantics
+site_url: https://YOUR_ORG.github.io/llang/
+repo_url: https://github.com/YOUR_ORG/llang
+repo_name: YOUR_ORG/llang
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+
+validation:
+  links:
+    not_found: warn
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - Tutorial: TUTORIAL.md
+      - Language reference: REFERENCE.md
+      - Grammar (v1): GRAMMAR.md
+      - c-ll (C-like surface): CLL.md
+  - Design and method:
+      - Language design: DESIGN.md
+      - Semantic decisions: SEMANTIC-DECISIONS.md
+      - Grounding method: METHOD.md
+      - Family plan: FAMILY-PLAN.md
+      - Roadmap: ROADMAP.md
+      - Open-source rewrites: REWRITES.md
+  - Tooling:
+      - Editor support: EDITOR-SUPPORT.md
+      - Publishing this site: SITE.md
+  - Audits:
+      - Core code: review/core-code-audit.md
+      - Documentation: review/docs-audit.md
+      - Test suite: review/test-suite-audit.md
+      - Provenance: review/provenance-audit.md
+  - Research:
+      - Overview: research/README.md
+      - Python semantics: research/python-semantics.md
+      - Natural-language precedents: research/natural-language-precedents.md
+      - Standard library design: research/stdlib-design.md
+      - Demo design: research/demo-design.md
+      - Terminal / shell semantics: research/terminal-semantics.md
+      - Test plan: research/test-plan.md
+      - Math library design: research/math-library-design.md
+      - Data science design: research/datascience-library-design.md
+      - ML library design: research/ml-library-design.md
+      - WASM semantics: research/wasm-semantics.md
+      - Self-hosting plan: research/self-hosting-plan.md
+      - Regex semantics: research/regex-semantics.md
+      - Classes semantics: research/classes-semantics.md
+      - LSP conformance: research/lsp-spec.md
+      - Engine target: research/engine-rewrite-target.md
+      - C-like surface design: research/c-like-surface-design.md

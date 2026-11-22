@@ -1,0 +1,20 @@
+# Generated / derived
+rubiks.html
+physics.html
+tools/pilots/*.ll
+tools/pilots/*.report.txt
+tools/selfhost/*.ll
+tools/selfhost/*.report.txt
+*.wasm
+ported.ll
+*.report.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Editors / OS
+.DS_Store

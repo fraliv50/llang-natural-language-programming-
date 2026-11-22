@@ -1,0 +1,36 @@
+{
+  "name": "llang-vscode",
+  "displayName": "llang language support",
+  "description": "Syntax highlighting for llang, the structured-English programming language (.ll files).",
+  "version": "0.1.0",
+  "publisher": "llang",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "llang",
+        "aliases": [
+          "llang",
+          "Llang"
+        ],
+        "extensions": [
+          ".ll"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "llang",
+        "scopeName": "source.llang",
+        "path": "./llang.tmLanguage.json"
+      }
+    ]
+  }
+}
