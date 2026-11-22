@@ -1,7 +1,11 @@
 # llang
 
-A programming language that reads like structured English and behaves like Python,
-designed so that both people and AI can write code that is easy to read.
+A programming language that reads like structured English and behaves like Python.
+
+> **Designed to be written by AI, and easy for humans to review.** llang is
+> highly interpretable and direct: explicit blocks, labeled arguments, strict
+> operations, and no hidden behavior. Nothing is cryptic on purpose — the point
+> is code you can understand at a glance, whether a model wrote it or you did.
 
 ```llang
 set scores to a map with "Ada" mapped to 91, "Grace" mapped to 98

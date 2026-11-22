@@ -21,7 +21,7 @@ Create this file at the repository root (it is intentionally not created here):
 
 ```yaml
 site_name: llang
-site_description: A structured-English programming language with Python semantics
+site_description: An AI-first, structured-English programming language that is easy to read and review
 site_url: https://YOUR_ORG.github.io/llang/
 repo_url: https://github.com/YOUR_ORG/llang
 repo_name: YOUR_ORG/llang

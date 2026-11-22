@@ -2,7 +2,13 @@
 
 A programming language that reads like structured English and behaves like Python.
 
-It was designed with one unusual constraint: **the primary author and reader is an AI**. Human-era compromises (terse syntax, abbreviations, operator soup, clever implicit behavior) are pure downside for a model, so llang trades them for verbose, explicit, regular constructs. Natural-language phrasing is the point, not a novelty — llang is structured pseudocode you can actually run.
+> **llang is built to be written by AI.** It is deliberately highly interpretable
+> and direct: every construct announces itself, every block has an explicit
+> terminator, every argument is labeled, and nothing hidden or implicit can slip
+> past a reviewer. The goal is not clever code — it is code you can read once and
+> understand, so humans can review what an AI wrote with confidence.
+
+Human-era compromises (terse syntax, abbreviations, operator soup, clever implicit behavior) are pure downside for a model, so llang trades them for verbose, explicit, regular constructs. Natural-language phrasing is the point, not a novelty — llang is structured pseudocode you can actually run.
 
 ```
 set scores to a map with "Ada" mapped to 91, "Grace" mapped to 98
