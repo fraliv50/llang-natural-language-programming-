@@ -27,6 +27,7 @@ program parses, lints clean, and produces output identical to the original.
 - **Libraries:** native llang modules in `lib/` (`math`, `text`, `lists`, `shell`, `shlex`, `fnmatch`, `textwrap`, `csv`, `json`, `re`, `ast_contract`, `pylev`, `humanize`), plus an explicitly labeled opt-in foreign bridge (`json`, `math`, `shell`)
 - **Objects:** minimal classes with explicit `this`, single inheritance-free construction via `call new ...`, and `ask instance to method ...`
 - **Compiler:** a WebAssembly backend for the integer/function subset — `llang-compile file.ll -o file.wasm`, verified by executing the output in Node
+- **Universal porting app:** point it at a repository and it converts supported source files (Python, C, JavaScript) to readable llang, preserving structure, with coverage reports, verification, and a JSONL cleanup queue for AI-assisted completion — `llang-port-repo <repo> -o <out>`
 - **Tooling:** source-located diagnostics, canonical formatter, pre-run linter, LSP language server, Python-to-llang converter, property-based differential fuzzer, single-command verification, GitHub Actions CI
 - **Ecosystem:** native `json` module, JSON package manifests with a registry, editor grammars for VS Code and tree-sitter, and a browser playground
 
@@ -45,6 +46,7 @@ python tools/port.py my.py -o ported.ll --report report.txt
 python run.py --lint examples/hello.ll
 python run.py --format examples/hello.ll
 node tools/playground/server.js           # browser playground at localhost:8080
+python -m llang.portapp.cli <repo> -o <out>  # port a whole repository to llang
 ```
 
 Or install the package for console commands:
@@ -109,6 +111,8 @@ Project:
 - `src/llang/lsp.py` — language server; `src/llang/packages.py` — package manifests and registry
 - `editors/` — VS Code and tree-sitter grammars; `docs/SITE.md` — documentation site guide
 - `tools/port.py` — automated Python → llang converter with an honest coverage report
+- `src/llang/portapp/` — universal repository porting app; see `docs/PORTING-APP.md`
+- `tools/cleanup_prompt.py` — turns a cleanup-queue item into a ready-to-paste AI prompt
 - `tools/check.py` — one command for tests, lint, rewrite verification, and link checks
 
 ## Layout

@@ -96,6 +96,13 @@ All notable changes to llang are recorded here. Dates follow the development ses
 - `this` removed from the reserved set (the method receiver is still positional and explicit)
 - 7 new tests in `tests/test_ai_ergonomics.py`
 
+## 2026-11-22 — universal porting application
+
+- `src/llang/portapp/`: pluggable repository porting pipeline (scanner, adapters, verifier, cleanup queue, reports, CLI) with `llang-port-repo` entry point
+- Adapters for Python (existing converter), C (pycparser), and JavaScript (tree-sitter); each reports explicit gaps and never silently drops code
+- `tools/cleanup_prompt.py` turns any cleanup-queue item into an AI-ready prompt containing source, partial llang, and gaps
+- `port` dependency extra added to `pyproject.toml`
+
 ## Known limitations
 
 See `docs/ROADMAP.md`. The primary execution path is the interpreter; a WASM backend exists for the integer/function subset.

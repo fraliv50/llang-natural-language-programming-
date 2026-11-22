@@ -21,12 +21,18 @@ classifiers = [
 llang = "llang.cli:main"
 llang-port = "llang.convert_cli:main"
 llang-compile = "llang.compile_cli:main"
+llang-port-repo = "llang.portapp.cli:main"
 
 [project.optional-dependencies]
 dev = [
   "numpy",
   "pandas",
   "scikit-learn",
+]
+port = [
+  "pycparser",
+  "tree_sitter",
+  "tree_sitter_javascript",
 ]
 
 [tool.setuptools]
