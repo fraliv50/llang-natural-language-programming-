@@ -519,6 +519,12 @@ sense in which this is the final proof of capability.
 
 ## Implementation status
 
+Stage 0 (data contract) and Stage 2 (lexer) are implemented:
+`lib/ast_contract.ll` and `lib/llang_lexer.ll`. The llang-written tokenizer is
+verified token-for-token against the Python bootstrap lexer by
+`tools/compare_lexer.py` (14 sources, 0 mismatches). Stage 1 (data model) and
+Stage 3 (parser) remain.
+
 Stage 0 (data contract) is implemented in `lib/ast_contract.ll` and verified by
 `tests/test_ast_contract.py`. It provides llang-native token and AST node maps,
 field accessors, structural equality, digests, and token rendering. Automatic

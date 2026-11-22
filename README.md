@@ -27,6 +27,7 @@ program parses, lints clean, and produces output identical to the original.
 - **Libraries:** native llang modules in `lib/` (`math`, `text`, `lists`, `shell`, `shlex`, `fnmatch`, `textwrap`, `csv`, `json`, `re`, `ast_contract`, `pylev`, `humanize`), plus an explicitly labeled opt-in foreign bridge (`json`, `math`, `shell`)
 - **Objects:** minimal classes with explicit `this`, single inheritance-free construction via `call new ...`, and `ask instance to method ...`
 - **Compiler:** a WebAssembly backend for the integer/function subset — `llang-compile file.ll -o file.wasm`, verified by executing the output in Node
+- **Self-hosting:** the language's own lexer is written in llang (`lib/llang_lexer.ll`) and verified token-for-token against the bootstrap lexer
 - **Universal porting app:** point it at a repository and it converts supported source files (Python, C, JavaScript) to readable llang, preserving structure, with coverage reports, verification, and a JSONL cleanup queue for AI-assisted completion — `llang-port-repo <repo> -o <out>`
 - **Tooling:** source-located diagnostics, canonical formatter, pre-run linter, LSP language server, Python-to-llang converter, property-based differential fuzzer, single-command verification, GitHub Actions CI
 - **Ecosystem:** native `json` module, JSON package manifests with a registry, editor grammars for VS Code and tree-sitter, and a browser playground
@@ -105,6 +106,7 @@ Project:
 - `lib/shlex.ll`, `lib/fnmatch.ll`, `lib/textwrap.ll`, `lib/csv.ll`, `lib/json.ll`, `lib/re.ll` — CPython modules rewritten in llang and verified against the stdlib
 - `lib/pylev.ll`, `lib/humanize.ll`, `lib/box2d.ll` — external open-source repos cloned and rewritten, verified against the originals (1,562 cases); `box2d` is a headless physics engine subset with a working 60-step simulation
 - `examples/box2d_visual.ll` — writes `physics.html`, a live browser animation of that simulation (all frames computed in llang)
+- `lib/llang_lexer.ll` — llang's own tokenizer, written in llang (self-hosting stage 2)
 - `lib/advanced_math.ll`, `lib/datascience.ll`, `lib/machinelearning.ll` — domain libraries grounded in Python math/statistics, NumPy/pandas and scikit-learn (330 cases)
 - **2,546 differential cases total, 0 mismatches**
 - `src/llang/compiler.py` — WebAssembly backend; `tools/playground/` — browser playground

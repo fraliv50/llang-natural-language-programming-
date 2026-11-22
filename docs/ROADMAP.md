@@ -22,7 +22,7 @@ llang is usable today, but it is not a clone of Python's entire runtime. This pa
 - LSP language server, editor grammars, docs-site guide
 - Native `json` and `re` modules, package manifests/registry, property-based differential fuzzer
 - Minimal classes with explicit `self` (`this`), grounded in the Python data model
-- Self-hosting stage 0 (token/AST data contract); LSP conformance fixes; WASM differential corpus
+- Self-hosting stages 0 and 2 (token/AST data contract, llang-written lexer); LSP conformance fixes; WASM differential corpus
 - Tutorial, reference, design documents, grounded research, flagship demos
 
 ## Deliberate divergences from Python

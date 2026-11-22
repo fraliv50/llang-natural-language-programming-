@@ -103,6 +103,12 @@ All notable changes to llang are recorded here. Dates follow the development ses
 - `tools/cleanup_prompt.py` turns any cleanup-queue item into an AI-ready prompt containing source, partial llang, and gaps
 - `port` dependency extra added to `pyproject.toml`
 
+## 2026-11-22 — self-hosting begins
+
+- `lib/llang_lexer.ll`: the llang tokenizer written in llang, using `lib/ast_contract.ll` token maps
+- `tools/compare_lexer.py`: token-for-token differential against the Python bootstrap lexer (14 sources, 0 mismatches); also found and fixed an opening-quote column off-by-one
+- 5 new tests in `tests/test_selfhost.py`
+
 ## Known limitations
 
 See `docs/ROADMAP.md`. The primary execution path is the interpreter; a WASM backend exists for the integer/function subset.

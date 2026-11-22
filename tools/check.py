@@ -80,7 +80,7 @@ def main() -> int:
                     "compare_wasm.py", "compare_re.py", "compare_math.py",
                     "compare_datascience.py", "compare_ml.py", "compare_pylev.py",
                     "compare_humanize.py", "compare_box2d.py",
-                    "compare_js_port.py", "compare_c_port.py",
+                    "compare_js_port.py", "compare_c_port.py", "compare_lexer.py",
                     "fuzz_semantics.py"):
         checks.append(run([python, f"tools/{harness}"], f"rewrite: {harness}"))
 
